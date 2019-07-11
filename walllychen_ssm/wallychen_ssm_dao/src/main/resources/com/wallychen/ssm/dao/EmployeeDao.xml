@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wallychen.ssm.dao.EmployeeDao">
+
+    <resultMap id="basicResultMap" type="com.wallychen.ssm.domain.Employee">
+        <id property="id" column="id" />
+        <result property="email" column="email"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="phoneNum" column="phoneNum"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <resultMap id="employeeAndRoles" type="com.wallychen.ssm.domain.Employee" extends="basicResultMap">
+        <collection property="roles" column="id" select="com.wallychen.ssm.dao.RoleDao.findRoleByUserId">
+            <id property="id" column="id" />
+            <result property="roleName" column="roleName" />
+            <result property="roleDesc" column="roleDesc" />
+        </collection>
+    </resultMap>
+
+    <select id="findAll" resultMap="basicResultMap">
+        select * from employee
+    </select>
+
+    <select id="findByUsername" parameterType="java.lang.String" resultMap="employeeAndRoles">
+        select * from employee where username = #{username}
+    </select>
+
+    <insert id="save" parameterType="com.wallychen.ssm.domain.Employee">
+        insert into employee(id,email,username,password,phoneNum,status)
+          values (#{id},#{email},#{username},#{password},#{phoneNum},#{status})
+    </insert>
+
+    <select id="findById" parameterType="java.lang.String" resultMap="employeeAndRoles">
+        select * from employee where id=#{id}
+    </select>
+
+    <insert id="addRoleToUser">
+        insert into employee_role(employeeId, roleId) values (#{employeeId},#{roleId})
+    </insert>
+
+</mapper>

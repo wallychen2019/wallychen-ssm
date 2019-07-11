@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wallychen.ssm.dao.TravellerDao">
+    <resultMap id="basicResultMap" type="com.wallychen.ssm.domain.Traveller">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="phoneNum" property="phoneNum"/>
+        <result column="credentialsType" property="credentialsType"/>
+        <result column="credentialsNum" property="credentialsNum"/>
+        <result column="travellerType" property="travellerType"/>
+    </resultMap>
+
+    <select id="findByOrdersId" parameterType="java.lang.String" resultMap="basicResultMap">
+        select * from traveller where id in (select travellerId from order_traveller where orderId = #{ordersId})
+    </select>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wallychen.ssm.dao.ProductDao">
+
+    <resultMap id="productBaseResult" type="com.wallychen.ssm.domain.Product">
+        <id property="id" column="id"/>
+        <result property="productNum" column="productNum"/>
+        <result property="productName" column="productName"/>
+        <result property="cityName" column="cityName"/>
+        <result property="departureTime" column="departureTime"/>
+        <result property="productPrice" column="productPrice"/>
+        <result property="productDesc" column="productDesc"/>
+        <result property="productStatus" column="productStatus"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="productBaseResult">
+        select * from product
+    </select>
+
+    <insert id="save" parameterType="com.wallychen.ssm.domain.Product">
+        insert into product(id,productNum,productName,cityName,departureTime,productPrice,productDesc,productStatus)
+          VALUES (#{id},#{productNum},#{productName},#{cityName},#{departureTime},#{productPrice},#{productDesc},#{productStatus})
+    </insert>
+
+    <select id="findById" parameterType="java.lang.String" resultMap="productBaseResult">
+        select * from product where id = #{id}
+    </select>
+
+</mapper>

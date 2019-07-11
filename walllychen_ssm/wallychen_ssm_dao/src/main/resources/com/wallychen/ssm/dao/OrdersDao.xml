@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wallychen.ssm.dao.OrdersDao">
+
+    <resultMap id="basicOrdersResult" type="com.wallychen.ssm.domain.Orders">
+        <id property="id" column="id" />
+        <result property="orderNum" column="orderNum" />
+        <result property="orderTime" column="orderTime" />
+        <result property="peopleCount" column="peopleCount" />
+        <result property="orderDesc" column="orderDesc" />
+        <result property="payType" column="payType" />
+        <result property="orderStatus" column="orderStatus" />
+        <association property="product" column="productId" select="com.wallychen.ssm.dao.ProductDao.findById">
+            <id column="id" property="id"></id>
+            <result column="productNum" property="productNum"></result>
+            <result column="productName" property="productName"></result>
+            <result column="cityName" property="cityName"></result>
+            <result column="departureTime" property="departureTime"></result>
+            <result column="productPrice" property="productPrice"></result>
+            <result column="productDesc" property="productDesc"></result>
+            <result column="productStatus" property="productStatus"></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="AllResultMap" type="com.wallychen.ssm.domain.Orders" extends="basicOrdersResult">
+        <association property="member" column="memberId" select="com.wallychen.ssm.dao.MemberDao.findById">
+            <id column="id" property="id" />
+            <result column="name" property="name" />
+            <result column="nickname" property="nickname" />
+            <result column="phoneNum" property="phoneNum" />
+            <result column="email" property="email" />
+        </association>
+        <collection property="travellers" column="id" select="com.wallychen.ssm.dao.TravellerDao.findByOrdersId">
+            <id column="id" property="id" />
+            <result column="name" property="name" />
+            <result column="sex" property="sex"/>
+            <result column="phoneNum" property="phoneNum"/>
+            <result column="credentialsType" property="credentialsType"/>
+            <result column="credentialsNum" property="credentialsNum"/>
+            <result column="travellerType" property="travellerType"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="basicOrdersResult">
+        select * from orders
+    </select>
+
+    <select id="findById" parameterType="java.lang.String" resultMap="AllResultMap">
+        select * from orders where id = #{id}
+    </select>
+
+</mapper>

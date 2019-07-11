@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wallychen.ssm.dao.PermissionDao">
+    
+    <resultMap id="basicResultMap" type="com.wallychen.ssm.domain.Permission">
+        <id property="id" column="id" />
+        <result property="permissionName" column="permissionName" />
+        <result property="url" column="url" />
+    </resultMap>
+
+    <select id="findOtherPermission" parameterType="java.lang.String" resultMap="basicResultMap">
+        select * from permission where id not in (select permissionId from role_permission where roleId = #{roleId})
+    </select>
+
+    <select id="findPermissionByRoleId" parameterType="java.lang.String" resultMap="basicResultMap">
+        select * from permission where id in (select permissionId from role_permission where roleId=#{roleId})
+    </select>
+
+    <select id="findAll" resultMap="basicResultMap">
+        select * from permission
+    </select>
+
+    <insert id="save" parameterType="com.wallychen.ssm.domain.Permission">
+        insert into permission(id,permissionName,url)
+          values(#{id},#{permissionName},#{url})
+    </insert>
+
+</mapper>
